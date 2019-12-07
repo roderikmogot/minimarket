@@ -572,8 +572,8 @@ class minimarket:
         else:
             if int(total_harga_barang) <= int(jumlah_yg_dibayar):
                 if int(total_harga_barang) - int(jumlah_yg_dibayar) == 0:
-                    Label(pembayaran_screen, text="Pembayaran sukses!").pack()
-                    Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
+                    Label(pembayaran_screen, text="Pembayaran sukses!", fg='green').pack()
+                    Label(pembayaran_screen, text="Terima kasih sudah berbelanja!", fg='green').pack()
 
                     count = len(open("transaksi.txt").readlines())
                     temp = str(count + 1) + ";" + str(barang_checkout) + ";" + str(jumlah_barang_checkout) + ";" + str(
@@ -582,12 +582,13 @@ class minimarket:
                     try:
                         f = open("transaksi.txt", "a")
                     except FileNotFoundError:
-                        tkinter.messagebox.showinfo("Error","File tidak diteumkan")
+                        tkinter.messagebox.showinfo("Error", "File tidak diteumkan")
                     else:
                         f.write(temp+"\n")
                         f.close()
                 else:
-                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp "+str(int(jumlah_yg_dibayar) - int(total_harga_barang))+".").pack()
+                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp " + str(
+                        int(jumlah_yg_dibayar) - int(total_harga_barang)) + ".", fg="green").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
