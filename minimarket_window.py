@@ -579,7 +579,7 @@ class minimarket:
                     except FileNotFoundError:
                         tkinter.messagebox.showinfo("Error","File tidak diteumkan")
                     else:
-                        f.write(temp)
+                        f.write(temp+"\n")
                         f.close()
                 else:
                     Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp "+str(int(jumlah_yg_dibayar) - int(total_harga_barang))+".").pack()
