@@ -1,1 +1,2 @@
 1;namabarang;jumlahdibeli;totalharga;bayarbrp
+2;PY_VAR0;PY_VAR1;20000;0

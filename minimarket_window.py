@@ -524,6 +524,8 @@ class minimarket:
             for ac in range(len(stock_barang)):
                 stock_barang[ac] = int(stock_barang[ac])
 
+        global barang_checkout
+        global jumlah_barang_checkout
         barang_checkout = barang_mau_di_beli.get()
         jumlah_barang_checkout = jumlah_barang_yg_mau_dibeli.get()
 
@@ -568,11 +570,23 @@ class minimarket:
                 if int(total_harga_barang) - int(jumlah_yg_dibayar) == 0:
                     Label(pembayaran_screen, text="Pembayaran sukses!").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
+
+                    count = len(open("barang_jualan.txt").readlines())
+                    temp=str(count+1)+";"+str(barang_checkout)+";"+str(jumlah_barang_checkout)+";"+str(total_harga_barang)+";"+str(int(total_harga_barang) - int(jumlah_yg_dibayar))
+
+                    try:
+                        f = open("barang_jualan.txt","a")
+                    except FileNotFoundError:
+                        tkinter.messagebox.showinfo("Error","File tidak diteumkan")
+                    else:
+                        f.write(temp)
+                        f.close()
                 else:
                     Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp "+str(int(jumlah_yg_dibayar) - int(total_harga_barang))+".").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
+
 
 if __name__ == '__main__':
     #######################
