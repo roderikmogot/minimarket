@@ -1,14 +1,14 @@
-from tkinter import *
 import tkinter.messagebox
-import time
 import tkinter.ttk as ttk
+from tkinter import *
+
 
 class minimarket:
-    def __init__(self,root):
+    def __init__(self, root):
         self.root = root
         self.root.title("Mini Market App")  # nama aplikasi
 
-        #create Menu
+        # create Menu
         menu = Menu(self.root)
         self.root.config(menu=menu)
 
@@ -209,32 +209,34 @@ class minimarket:
 
         session_login.title("Minimarket - Index")
 
-        Label(session_login, text="Selamat datang,  "+ login_username +". \nAnda login sebagai admin.", anchor='w').pack(fill='both')
+        Label(session_login, text="Selamat datang,  " + login_username + ". \nAnda login sebagai admin.",
+              anchor='w').pack(fill='both')
 
         nama_barang = []
         jumlah_barang = []
 
-        show_table = Button(session_login, text="Report/Transaksi Penjualan", height=2, width=20, command=self.tabel_transaksi).pack(side=BOTTOM)
+        show_table = Button(session_login, text="Report/Transaksi Penjualan", height=2, width=20,
+                            command=self.tabel_list_barang).pack(side=BOTTOM)
 
-    def tabel_transaksi(self):
-        global transaksi_screen
-        transaksi_screen = Toplevel()
+    def tabel_list_barang(self):
+        global tabel_list_barang_screen
+        tabel_list_barang_screen = Toplevel()
 
         # transaksi_screen.resizable(False, False)  # disable fullscreen
 
         window_height = 350
         window_width = 700
 
-        screen_width = transaksi_screen.winfo_screenwidth()
-        screen_height = transaksi_screen.winfo_screenheight()
+        screen_width = tabel_list_barang_screen.winfo_screenwidth()
+        screen_height = tabel_list_barang_screen.winfo_screenheight()
 
         x_coordinate = int((screen_width / 2) - (window_width / 2))
         y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-        transaksi_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
+        tabel_list_barang_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
         ##########################
 
-        transaksi_screen.title("Minimarket - List Barang")
+        tabel_list_barang_screen.title("Minimarket - List Barang")
 
         global id_barang
         global nama_barang
@@ -247,7 +249,7 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt','r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error','File tidak ditemukan!')
         else:
@@ -268,7 +270,7 @@ class minimarket:
                 stock_barang[ac] = int(stock_barang[ac])
 
             global tabel_transaksi
-            tabel_transaksi = ttk.Treeview(transaksi_screen)
+            tabel_transaksi = ttk.Treeview(tabel_list_barang_screen)
             tabel_transaksi["columns"] = ("one", "two", "three")
             tabel_transaksi.column("#0", width=100, minwidth=100)
             tabel_transaksi.column("one", width=300, minwidth=300)
@@ -285,12 +287,14 @@ class minimarket:
 
             tabel_transaksi.pack()
             #######
-            ttk.Style().configure('green/black.TButton', foreground='green', background='black') #configure dlu!
-            ttk.Button(transaksi_screen, text="Add data", style="green.black.TButton",command=self.add_data).pack(side="top", fill="both",expand=True)#command
+            ttk.Style().configure('green/black.TButton', foreground='green', background='black')  # configure dlu!
+            ttk.Button(tabel_list_barang_screen, text="Add data", style="green.black.TButton",
+                       command=self.add_data).pack(side="top", fill="both", expand=True)  #command
 
-            ttk.Button(transaksi_screen, text="Delete data", style="green.black.TButton", command=self.delete_data).pack()#command
+            ttk.Button(tabel_list_barang_screen, text="Delete data", style="green.black.TButton",
+                       command=self.delete_data).pack()  #command
 
-            ttk.Button(transaksi_screen, text="Edit data", style="green.black.TButton").pack()#command
+            ttk.Button(tabel_list_barang_screen, text="Edit data", style="green.black.TButton").pack()  #command
 
     def add_data(self):
         global tambah_data
@@ -345,7 +349,7 @@ class minimarket:
                 tkinter.messagebox.showinfo("Error", "Harga dan stock data wajib dalam bentuk angka!")
             else:
                 try:
-                    f = open('transaksi.txt','a')
+                    f = open('list_barang.txt', 'a')
                 except FileNotFoundError:
                     tkinter.messagebox.showinfo('Error', 'File tidak ditemukan')
                 else:
@@ -392,9 +396,9 @@ class minimarket:
         del_data = delete_barang.get()
         if del_data != ' ':
             if del_data in nama_barang:
-                with open("transaksi.txt", "r") as f:
+                with open("list_barang.txt", "r") as f:
                     lines = f.readlines()
-                with open("transaksi.txt", "w") as f:
+                with open("list_barang.txt", "w") as f:
                     for line in lines:
                         if del_data not in line:
                             f.write(line)
@@ -429,7 +433,7 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt', 'r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
         else:
@@ -504,7 +508,7 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt', 'r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
         else:
@@ -571,11 +575,12 @@ class minimarket:
                     Label(pembayaran_screen, text="Pembayaran sukses!").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
 
-                    count = len(open("barang_jualan.txt").readlines())
-                    temp=str(count+1)+";"+str(barang_checkout)+";"+str(jumlah_barang_checkout)+";"+str(total_harga_barang)+";"+str(int(total_harga_barang) - int(jumlah_yg_dibayar))
+                    count = len(open("transaksi.txt").readlines())
+                    temp = str(count + 1) + ";" + str(barang_checkout) + ";" + str(jumlah_barang_checkout) + ";" + str(
+                        total_harga_barang) + ";" + str(int(total_harga_barang) - int(jumlah_yg_dibayar))
 
                     try:
-                        f = open("barang_jualan.txt","a")
+                        f = open("transaksi.txt", "a")
                     except FileNotFoundError:
                         tkinter.messagebox.showinfo("Error","File tidak diteumkan")
                     else:
