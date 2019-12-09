@@ -210,8 +210,10 @@ class minimarket:
         Label(session_login, text="Selamat datang,  " + login_username + ". \nAnda login sebagai admin.",
               anchor='w').pack(fill='both')
 
-        Button(session_login, text="Report/Transaksi Penjualan", height=2, width=20,
-                            command=self.tabel_list_barang).pack(side=BOTTOM)
+        Button(session_login, text="Edit list barang", height=2, width=20,
+                            command=self.tabel_list_barang).pack()
+
+        Button(session_login, text="Report Penjualan",height=2, width=20, command=self.tabel_list_transaksi).pack()
 
     def tabel_list_barang(self):
         global tabel_list_barang_screen
@@ -264,24 +266,24 @@ class minimarket:
             for ac in range(len(stock_barang)):
                 stock_barang[ac] = int(stock_barang[ac])
 
-            global tabel_transaksi
-            tabel_transaksi = ttk.Treeview(tabel_list_barang_screen)
-            tabel_transaksi["columns"] = ("one", "two", "three")
-            tabel_transaksi.column("#0", width=100, minwidth=100)
-            tabel_transaksi.column("one", width=300, minwidth=300)
-            tabel_transaksi.column("two", width=200, minwidth=200)
-            tabel_transaksi.column("three", width=97, minwidth=97)
+            global tabel_list_barang
+            tabel_list_barang = ttk.Treeview(tabel_list_barang_screen)
+            tabel_list_barang["columns"] = ("one", "two", "three")
+            tabel_list_barang.column("#0", width=100, minwidth=100)
+            tabel_list_barang.column("one", width=300, minwidth=300)
+            tabel_list_barang.column("two", width=200, minwidth=200)
+            tabel_list_barang.column("three", width=97, minwidth=97)
 
-            tabel_transaksi.heading("#0", text="No")
-            tabel_transaksi.heading("one", text="Nama Barang")
-            tabel_transaksi.heading("two", text="Harga Barang")
-            tabel_transaksi.heading("three", text="Stock")
+            tabel_list_barang.heading("#0", text="No")
+            tabel_list_barang.heading("one", text="Nama Barang")
+            tabel_list_barang.heading("two", text="Harga Barang")
+            tabel_list_barang.heading("three", text="Stock")
 
             for i in range(len(id_barang)):
-                tabel_transaksi.insert("", i, text=str(i + 1).center(20), values=(
+                tabel_list_barang.insert("", i, text=str(i + 1).center(20), values=(
                 nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
 
-            tabel_transaksi.pack()
+            tabel_list_barang.pack()
             #######
             ttk.Style().configure('green/black.TButton', foreground='green', background='black')  # configure dlu!
             ttk.Button(tabel_list_barang_screen, text="Add data", style="green.black.TButton",
@@ -291,6 +293,82 @@ class minimarket:
                        command=self.delete_data).pack()  # command
 
             ttk.Button(tabel_list_barang_screen, text="Edit data", style="green.black.TButton").pack()  # command
+
+    def tabel_list_transaksi(self):
+        global tabel_list_penjualan_screen
+        tabel_list_penjualan_screen = Toplevel()
+
+        # transaksi_screen.resizable(False, False)  # disable fullscreen
+
+        window_height = 350
+        window_width = 700
+
+        screen_width = tabel_list_penjualan_screen.winfo_screenwidth()
+        screen_height = tabel_list_penjualan_screen.winfo_screenheight()
+
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+        tabel_list_penjualan_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
+        ##########################
+
+        tabel_list_penjualan_screen.title("Minimarket - Penjualan")
+
+        global id_transaksi
+        global nama_barang_transaksi
+        global total_harga_transaksi
+        global stock_barang_transaksi
+
+        id_transaksi = []
+        nama_barang_transaksi = []
+        total_harga_transaksi = []
+        stock_barang_transaksi = []
+        tanggal_transaksi = []
+
+        try:
+            f = open('transaksi.txt', 'r')
+        except FileNotFoundError:
+            tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
+        else:
+            for line in f:
+                fields = line.split(";")
+                id_transaksi.append(fields[0])
+                nama_barang_transaksi.append(fields[1])
+                total_harga_transaksi.append(fields[2])
+                stock_barang_transaksi.append(fields[3])
+                tanggal_transaksi.append(fields[4])
+
+            for ab in range(len(id_transaksi)):
+                id_transaksi[ab] = int(id_transaksi[ab])
+
+            for cb in range(len(total_harga_transaksi)):
+                total_harga_transaksi[cb] = int(total_harga_transaksi[cb])
+
+            for ac in range(len(stock_barang_transaksi)):
+                stock_barang_transaksi[ac] = int(stock_barang_transaksi[ac])
+
+            global tabel_list_transaksi
+            tabel_list_transaksi = ttk.Treeview(tabel_list_penjualan_screen)
+            tabel_list_transaksi["columns"] = ("one", "two", "three","four")
+            tabel_list_transaksi.column("#0", width=100, minwidth=100)
+            tabel_list_transaksi.column("one", width=300, minwidth=300)
+            tabel_list_transaksi.column("two", width=200, minwidth=200)
+            tabel_list_transaksi.column("three", width=97, minwidth=97)
+            tabel_list_transaksi.column("four", width=110, minwidth=110)
+
+            tabel_list_transaksi.heading("#0", text="No")
+            tabel_list_transaksi.heading("one", text="Barang terjual")
+            tabel_list_transaksi.heading("two", text="Total harga belanja")
+            tabel_list_transaksi.heading("three", text="Jumlah yg dibeli")
+            tabel_list_transaksi.heading("four", text="Tanggal transaksi")
+
+            for i in range(len(id_transaksi)):
+                tabel_list_transaksi.insert("", i, text=str(i + 1).center(20), values=(
+                    nama_barang_transaksi[i].center(75), str(stock_barang_transaksi[i]).center(50), str(total_harga_transaksi[i]).center(20), str(tanggal_transaksi[i]).center(20)))
+
+            tabel_list_transaksi.pack(fill=X)
+            #######
+
 
     def add_data(self):
         global tambah_data
