@@ -1,14 +1,14 @@
-from tkinter import *
 import tkinter.messagebox
-import time
 import tkinter.ttk as ttk
+from tkinter import *
+from datetime import date
 
 class minimarket:
-    def __init__(self,root):
+    def __init__(self, root):
         self.root = root
         self.root.title("Mini Market App")  # nama aplikasi
 
-        #create Menu
+        # create Menu
         menu = Menu(self.root)
         self.root.config(menu=menu)
 
@@ -18,27 +18,27 @@ class minimarket:
 
         Label(text="").pack()
 
-        #judul app
-        label_judul = Label(self.root, text="Mini Market Application", font=("Arial", 18, "bold")) #create label/text
-        label_judul.pack() #center output
+        # judul app
+        label_judul = Label(self.root, text="Mini Market Application", font=("Arial", 18, "bold"))  # create label/text
+        label_judul.pack()  # center output
 
-        label_greeting = Label(self.root, text="Welcome to our App!\n\n", font=("Arial", 14,"italic"))
+        label_greeting = Label(self.root, text="Welcome to our App!\n\n", font=("Arial", 14, "italic"))
         label_greeting.pack()
 
-        #login button
-        Label(text="Sudah daftar?", font=('Arial',14)).pack()
+        # login button
+        Label(text="Sudah daftar?", font=('Arial', 14)).pack()
         button_login = Button(text="Login", height="2", width="30", command=self.window_login).pack()
         Label(text="\n\n\n").pack()
 
         Label(text="Belum daftar?", font=('Arial', 14)).pack()
 
-        #register button
+        # register button
         button_register = Button(text="Register", height="2", width="30", command=self.window_register).pack()
 
         Button(text="Customer", height=2, width=30, command=self.belanja).pack()
 
-    def quit(self): #exit!!!
-        exit_program = tkinter.messagebox.askquestion("Exit","Are you sure you want to exit?")
+    def quit(self):  # exit!!!
+        exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
 
         if exit_program == 'yes':
             self.root.destroy()
@@ -71,31 +71,33 @@ class minimarket:
         global user_register_entry
         global password_register_entry
 
-        login_judul = Label(register_screen, text="Mini Market Application", font=("Arial", 18, "bold")) #create label/text
-        login_judul.pack() #center output
+        login_judul = Label(register_screen, text="Mini Market Application",
+                            font=("Arial", 18, "bold"))  # create label/text
+        login_judul.pack()  # center output
 
-        login_greeting = Label(register_screen, text="Register data\n\n", font=("Arial", 14,"italic"))
+        login_greeting = Label(register_screen, text="Register data\n\n", font=("Arial", 14, "italic"))
         login_greeting.pack()
 
-        #buat form
-        user_entry_label = Label(register_screen, text="Username: ").pack()  #username label
-        user_register_entry = Entry(register_screen,textvariable=username_register).pack()  #username box
+        # buat form
+        Label(register_screen, text="Username: ").pack()  # username label
+        user_register_entry = Entry(register_screen, textvariable=username_register).pack()  # username box
 
-        password_entry_label = Label(register_screen, text="Password: ").pack()  #PasswordLabel
-        password_register_entry = Entry(register_screen, textvariable=password_register, show='*').pack()  # Password box
+        Label(register_screen, text="Password: ").pack()  # PasswordLabel
+        password_register_entry = Entry(register_screen, textvariable=password_register,
+                                        show='*').pack()  # Password box
 
-        register_butt = Button(register_screen, text="Register", height="2",width="10", command=self.register_user).pack()  # login button
+        Button(register_screen, text="Register", height="2", width="10",
+                               command=self.register_user).pack()  # login button
 
     def register_user(self):
         username_data = username_register.get()
         password_data = password_register.get()
 
-
-        if username_data == "" or password_data == "":
+        if username_data == " " or password_data == " ":
             tkinter.messagebox.showinfo('Error', 'Wajib diisi semuanya!')
         else:
-            file = open("saved_id.txt","a")
-            temp = username_data+";"+password_data
+            file = open("saved_id.txt", "a")
+            temp = username_data + ";" + password_data
             file.write(temp + "\n")
             file.close()
 
@@ -122,29 +124,25 @@ class minimarket:
 
         login_screen.title("Minimarket - Login")
 
+
+        Label(login_screen, text="Mini Market Application", font=("Arial", 18, "bold")).pack()
+
+
+        Label(login_screen, text="Please enter your information!\n\n", font=("Arial", 14, "italic")).pack()
+
         global username_verify
         global password_verify
 
         username_verify = StringVar()
         password_verify = StringVar()
 
-        global user_login_entry
-        global password_login_entry
+        Label(login_screen, text="Username: ").pack()
+        Entry(login_screen, textvariable=username_verify).pack()
 
-        login_judul = Label(login_screen, text="Mini Market Application", font=("Arial", 18, "bold"))
-        login_judul.pack()
+        Label(login_screen, text="Password: ").pack()
+        Entry(login_screen, textvariable=password_verify, show='*').pack()
 
-        login_greeting = Label(login_screen, text="Please enter your information!\n\n", font=("Arial", 14,"italic"))
-        login_greeting.pack()
-
-
-        user_entry_label = Label(login_screen, text="Username: ").pack()
-        user_login_entry = Entry(login_screen, textvariable=username_verify).pack()
-
-        password_entry_label = Label(login_screen, text="Password: ").pack()
-        password_login_entry = Entry(login_screen, textvariable=password_verify, show='*').pack()
-
-        login_butt = Button(login_screen, text="Sign In", height="2",width="10", command=self.proses_Login).pack()
+        Button(login_screen, text="Sign In", height="2", width="10", command=self.proses_Login).pack()
 
     def proses_Login(self):
         user_verify = username_verify.get()
@@ -153,9 +151,9 @@ class minimarket:
         username_id = []
         password_id = []
         try:
-            file = open("saved_id.txt","r")
+            file = open("saved_id.txt", "r")
         except FileNotFoundError:
-            tkinter.messagebox.showinfo('Error','File tidak ditemukan')
+            tkinter.messagebox.showinfo('Error', 'File tidak ditemukan')
         else:
             for line in file:
                 fields = line.split(";")
@@ -165,24 +163,24 @@ class minimarket:
             for i in range(len(password_id)):
                 kata_password = password_id[i]
                 global hasil_kata_password
-                hasil_kata_password = kata_password.replace("\n","")
+                hasil_kata_password = kata_password.replace("\n", "")
                 password_id.remove(kata_password)
                 password_id.insert(i, hasil_kata_password)
 
             if user_verify and pass_verify != ' ':
                 if user_verify in username_id:
                     dapet_index_username = username_id.index(user_verify)
-                    if pass_verify in password_id[dapet_index_username]:
+                    if pass_verify == password_id[dapet_index_username]:
 
                         global login_username
 
                         login_username = username_id[dapet_index_username]
 
-                        tkinter.messagebox.showinfo('Sukses','Login berhasil..')
+                        tkinter.messagebox.showinfo('Sukses', 'Login berhasil..')
                         self.session_login()
                         self.root.withdraw()
                     else:
-                        tkinter.messagebox.showinfo('Error','Salah password!')
+                        tkinter.messagebox.showinfo('Error', 'Salah password!')
                 else:
                     tkinter.messagebox.showinfo('Error', 'Username tidak ditemukan!')
             else:
@@ -209,32 +207,31 @@ class minimarket:
 
         session_login.title("Minimarket - Index")
 
-        Label(session_login, text="Selamat datang,  "+ login_username +". \nAnda login sebagai admin.", anchor='w').pack(fill='both')
+        Label(session_login, text="Selamat datang,  " + login_username + ". \nAnda login sebagai admin.",
+              anchor='w').pack(fill='both')
 
-        nama_barang = []
-        jumlah_barang = []
+        Button(session_login, text="Report/Transaksi Penjualan", height=2, width=20,
+                            command=self.tabel_list_barang).pack(side=BOTTOM)
 
-        show_table = Button(session_login, text="Report/Transaksi Penjualan", height=2, width=20, command=self.tabel_transaksi).pack(side=BOTTOM)
-
-    def tabel_transaksi(self):
-        global transaksi_screen
-        transaksi_screen = Toplevel()
+    def tabel_list_barang(self):
+        global tabel_list_barang_screen
+        tabel_list_barang_screen = Toplevel()
 
         # transaksi_screen.resizable(False, False)  # disable fullscreen
 
         window_height = 350
         window_width = 700
 
-        screen_width = transaksi_screen.winfo_screenwidth()
-        screen_height = transaksi_screen.winfo_screenheight()
+        screen_width = tabel_list_barang_screen.winfo_screenwidth()
+        screen_height = tabel_list_barang_screen.winfo_screenheight()
 
         x_coordinate = int((screen_width / 2) - (window_width / 2))
         y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-        transaksi_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
+        tabel_list_barang_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
         ##########################
 
-        transaksi_screen.title("Minimarket - List Barang")
+        tabel_list_barang_screen.title("Minimarket - List Barang")
 
         global id_barang
         global nama_barang
@@ -247,9 +244,9 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt','r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
-            tkinter.messagebox.showinfo('Error','File tidak ditemukan!')
+            tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
         else:
             for line in f:
                 fields = line.split(";")
@@ -268,7 +265,7 @@ class minimarket:
                 stock_barang[ac] = int(stock_barang[ac])
 
             global tabel_transaksi
-            tabel_transaksi = ttk.Treeview(transaksi_screen)
+            tabel_transaksi = ttk.Treeview(tabel_list_barang_screen)
             tabel_transaksi["columns"] = ("one", "two", "three")
             tabel_transaksi.column("#0", width=100, minwidth=100)
             tabel_transaksi.column("one", width=300, minwidth=300)
@@ -281,16 +278,19 @@ class minimarket:
             tabel_transaksi.heading("three", text="Stock")
 
             for i in range(len(id_barang)):
-                tabel_transaksi.insert("",i,text=str(i+1).center(20), values=(nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
+                tabel_transaksi.insert("", i, text=str(i + 1).center(20), values=(
+                nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
 
             tabel_transaksi.pack()
             #######
-            ttk.Style().configure('green/black.TButton', foreground='green', background='black') #configure dlu!
-            ttk.Button(transaksi_screen, text="Add data", style="green.black.TButton",command=self.add_data).pack(side="top", fill="both",expand=True)#command
+            ttk.Style().configure('green/black.TButton', foreground='green', background='black')  # configure dlu!
+            ttk.Button(tabel_list_barang_screen, text="Add data", style="green.black.TButton",
+                       command=self.add_data).pack(side="top", fill="both", expand=True)  # command
 
-            ttk.Button(transaksi_screen, text="Delete data", style="green.black.TButton", command=self.delete_data).pack()#command
+            ttk.Button(tabel_list_barang_screen, text="Delete data", style="green.black.TButton",
+                       command=self.delete_data).pack()  # command
 
-            ttk.Button(transaksi_screen, text="Edit data", style="green.black.TButton").pack()#command
+            ttk.Button(tabel_list_barang_screen, text="Edit data", style="green.black.TButton").pack()  # command
 
     def add_data(self):
         global tambah_data
@@ -313,24 +313,24 @@ class minimarket:
         tambah_data.title("Minimarket - Add data")
 
         Label(tambah_data, text='Nama barang :').pack()
-        #nama barang
+        # nama barang
         global tambah_barang_data
         tambah_barang_data = StringVar()
-        tambah_barang = Entry(tambah_data,textvariable=tambah_barang_data).pack()
+        tambah_barang = Entry(tambah_data, textvariable=tambah_barang_data).pack()
 
         Label(tambah_data, text='Harga barang :').pack()
-        #harga barang
+        # harga barang
         global tambah_harga_data
         tambah_harga_data = StringVar()
         tambah_harga = Entry(tambah_data, textvariable=tambah_harga_data).pack()
 
         Label(tambah_data, text='Stock barang :').pack()
-        #stock barang
+        # stock barang
         global tambah_stock_data
         tambah_stock_data = StringVar()
         tambah_stock = Entry(tambah_data, textvariable=tambah_stock_data).pack()
 
-        Button(tambah_data, text="Add data!",command=self.proses_add_data).pack()
+        Button(tambah_data, text="Add data!", command=self.proses_add_data).pack()
 
     def proses_add_data(self):
         proses_tambah_data = tambah_barang_data.get()
@@ -345,14 +345,14 @@ class minimarket:
                 tkinter.messagebox.showinfo("Error", "Harga dan stock data wajib dalam bentuk angka!")
             else:
                 try:
-                    f = open('transaksi.txt','a')
+                    f = open('list_barang.txt', 'a')
                 except FileNotFoundError:
                     tkinter.messagebox.showinfo('Error', 'File tidak ditemukan')
                 else:
                     a = len(id_barang)
                     b = a + 1
-                    temp = str(b) + ";" + proses_tambah_data +";"+ proses_harga_data +";"+ proses_stock_data
-                    f.write(temp+"\n")
+                    temp = str(b) + ";" + proses_tambah_data + ";" + proses_harga_data + ";" + proses_stock_data
+                    f.write(temp + "\n")
                     f.close()
 
                     tkinter.messagebox.showinfo('Sukses!', 'Menambahkan data sukses!')
@@ -392,13 +392,13 @@ class minimarket:
         del_data = delete_barang.get()
         if del_data != ' ':
             if del_data in nama_barang:
-                with open("transaksi.txt", "r") as f:
+                with open("list_barang.txt", "r") as f:
                     lines = f.readlines()
-                with open("transaksi.txt", "w") as f:
+                with open("list_barang.txt", "w") as f:
                     for line in lines:
                         if del_data not in line:
                             f.write(line)
-                tkinter.messagebox.showinfo("Error","Data sukses dihapus!")
+                tkinter.messagebox.showinfo("Error", "Data sukses dihapus!")
                 delete_screen.destroy()
         else:
             tkinter.messagebox.showinfo("Error", "Entry wajib diisi!")
@@ -429,7 +429,7 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt', 'r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
         else:
@@ -462,7 +462,7 @@ class minimarket:
 
             for i in range(len(id_barang)):
                 tabel_barang.insert("", i, text=str(i + 1).center(20), values=(
-                nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
+                    nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
 
             tabel_barang.pack()
 
@@ -504,7 +504,7 @@ class minimarket:
         stock_barang = []
 
         try:
-            f = open('transaksi.txt', 'r')
+            f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
         else:
@@ -524,6 +524,8 @@ class minimarket:
             for ac in range(len(stock_barang)):
                 stock_barang[ac] = int(stock_barang[ac])
 
+        global barang_checkout
+        global jumlah_barang_checkout
         barang_checkout = barang_mau_di_beli.get()
         jumlah_barang_checkout = jumlah_barang_yg_mau_dibeli.get()
 
@@ -537,7 +539,7 @@ class minimarket:
                 try:
                     barang_exist = nama_barang.index(barang_checkout)
                 except ValueError:
-                    tkinter.messagebox.showinfo("Error", "Barang "+barang_checkout+" tidak ada!")
+                    tkinter.messagebox.showinfo("Error", "Barang " + barang_checkout + " tidak ada!")
                     pembayaran_screen.destroy()
                 else:
                     if jumlah_barang_checkout != 0:
@@ -545,18 +547,19 @@ class minimarket:
                             global total_harga_barang
                             total_harga_barang = int(harga_barang[barang_exist]) * int(jumlah_barang_checkout)
 
-                            Label(pembayaran_screen,text="Anda akan melakukan pembelian barang "+str(barang_checkout)+" dengan total harga Rp"+str(total_harga_barang)+".").pack()
+                            Label(pembayaran_screen, text="Anda akan melakukan pembelian barang " + str(
+                                barang_checkout) + " dengan total harga Rp" + str(total_harga_barang) + ".").pack()
                             Label(pembayaran_screen, text="Masukkan jumlah yg harus dibayar:").pack()
 
                             global uang_dibayar
                             uang_dibayar = StringVar()
-                            Entry(pembayaran_screen,textvariable=uang_dibayar).pack()
-                            Button(pembayaran_screen, text="Bayar",command=self.proses_pembayaran).pack()
+                            Entry(pembayaran_screen, textvariable=uang_dibayar).pack()
+                            Button(pembayaran_screen, text="Bayar", command=self.proses_pembayaran).pack()
 
                         else:
-                            tkinter.messagebox.showinfo("Maaf","Jumlah barang yg ada kurang dari permintaan!")
+                            tkinter.messagebox.showinfo("Maaf", "Jumlah barang yg ada kurang dari permintaan!")
                     else:
-                        tkinter.messagebox.showinfo("Error","Stock wajib >0!")
+                        tkinter.messagebox.showinfo("Error", "Stock wajib >0!")
 
     def proses_pembayaran(self):
         try:
@@ -568,11 +571,25 @@ class minimarket:
                 if int(total_harga_barang) - int(jumlah_yg_dibayar) == 0:
                     Label(pembayaran_screen, text="Pembayaran sukses!").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
+
+                    count = len(open("transaksi.txt").readlines())
+                    temp = str(count + 1) + ";" + str(barang_checkout) + ";" + str(jumlah_barang_checkout) + ";" + str(
+                        total_harga_barang) + ";" + str(date.today())
+
+                    try:
+                        f = open("transaksi.txt", "a")
+                    except FileNotFoundError:
+                        tkinter.messagebox.showinfo("Error", "File tidak diteumkan")
+                    else:
+                        f.write(temp + "\n")
+                        f.close()
                 else:
-                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp "+str(int(jumlah_yg_dibayar) - int(total_harga_barang))+".").pack()
+                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp " + str(
+                        int(jumlah_yg_dibayar) - int(total_harga_barang)) + ".").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
+
 
 if __name__ == '__main__':
     #######################
@@ -592,6 +609,7 @@ if __name__ == '__main__':
     root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
     ##########################
 
-    application = minimarket(root)#access class
+    application = minimarket(root)  # access class
 
-    root.mainloop() #loop supaya app jalan terus
+    root.mainloop()  # loop supaya app jalan terus
+
