@@ -7,13 +7,14 @@ from datetime import date
 #yang masih kurang
 #1. edit data,
 #2. kurangin stock
-#3. sort data
+#3.tampilan edit data kurang efisien
 
 #-----yg udh selesai-------
 #1. login register selesai
 #2. client melakukan pembelian
 #3. list transaksi
 #3. verifikasi add data jika ada yg sama
+#3. sort data
 
 class minimarket:
     def __init__(self, root):
@@ -214,8 +215,8 @@ class minimarket:
 
         # transaksi_screen.resizable(False, False)  # disable fullscreen
 
-        window_height = 500
-        window_width = 1000
+        window_height = 477
+        window_width = 1099
 
         screen_width = tabel_list_barang_screen.winfo_screenwidth()
         screen_height = tabel_list_barang_screen.winfo_screenheight()
@@ -242,6 +243,7 @@ class minimarket:
             f = open('list_barang.txt', 'r')
         except FileNotFoundError:
             tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
+            tabel_list_barang_screen.destroy()
         else:
             for line in f:
                 fields = line.split(";")
@@ -261,30 +263,34 @@ class minimarket:
 
             global tabel_list_barang
             tabel_list_barang = ttk.Treeview(tabel_list_barang_screen)
-            tabel_list_barang["columns"] = ("one", "two", "three")
-            tabel_list_barang.column("#0", width=100, minwidth=100)
-            tabel_list_barang.column("one", width=300, minwidth=300)
-            tabel_list_barang.column("two", width=200, minwidth=200)
-            tabel_list_barang.column("three", width=97, minwidth=97)
+            tabel_list_barang["columns"] = ("Item", "Price", "Stock", "ID")
+            tabel_list_barang['show']='headings'
+            tabel_list_barang.column("#0", width=97, minwidth=97)
+            tabel_list_barang.column("Item", width=397, minwidth=397)
+            tabel_list_barang.column("Price", width=200, minwidth=200)
+            tabel_list_barang.column("Stock", width=97, minwidth=97)
+            tabel_list_barang.column("ID", width=97, minwidth=97)
 
-            tabel_list_barang.heading("#0", text="No", anchor="center")
-            tabel_list_barang.heading("one", text="Nama Barang", anchor="center")
-            tabel_list_barang.heading("two", text="Harga Barang",anchor="center")
-            tabel_list_barang.heading("three", text="Stock",anchor="center")
+            tabel_list_barang.heading("#0", text="ID", anchor="center")
+            tabel_list_barang.heading("Item", text="Nama Barang", anchor="center")
+            tabel_list_barang.heading("Price", text="Harga Barang",anchor="center")
+            tabel_list_barang.heading("Stock", text="Stock",anchor="center")
+            tabel_list_barang.heading("ID", text="ID", anchor='center')
 
             for i in range(len(id_barang)):
-                tabel_list_barang.insert("", i, text=str(i + 1).center(40), values=(
-                nama_barang[i].center(95), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42)))
+                tabel_list_barang.insert("", i,text='' ,values=(nama_barang[i].center(95), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42), str(id_barang[i]).center(20)))
+
+            columns = ('Item', 'Price','Stock','ID')
+            for col in columns:
+                tabel_list_barang.heading(col, text=col, command=lambda _col=col:self.sorting(tabel_list_barang, _col, False))
 
             tabel_list_barang.pack(fill='x', anchor='center')
-            #######
-            Button(tabel_list_barang_screen, text="Add data",
-                       command=self.add_data).pack()  # command
 
-            Button(tabel_list_barang_screen, text="Delete data",
-                       command=self.delete_data).pack()  # command
+        Button(tabel_list_barang_screen, height='12',width='30', text="Add data",font=("Arial",20,"bold"),command=self.add_data).place(x='182',y='339',anchor='center')
+        Button(tabel_list_barang_screen,height='12',width='30', text="Edit data", font=("Arial",20,"bold"), command=self.edit_data).place(x='549',y='339',anchor='center')
+        Button(tabel_list_barang_screen, height='12', width='30', text="Delete data", font=("Arial", 20, "bold"),command=self.delete_data).place(x='916', y='339', anchor='center')
 
-            Button(tabel_list_barang_screen, text="Edit data", command=self.edit_data).pack()  # command
+
 
     def tabel_list_transaksi(self):
         global tabel_list_penjualan_screen
@@ -472,8 +478,8 @@ class minimarket:
 
         edit_data_screen.resizable(False, False)  # disable fullscreen
 
-        window_height = 350
-        window_width = 700
+        window_height = 477
+        window_width = 1099
 
         screen_width = edit_data_screen.winfo_screenwidth()
         screen_height = edit_data_screen.winfo_screenheight()
@@ -514,22 +520,30 @@ class minimarket:
 
             global tabel_list_barang
             tabel_list_barang = ttk.Treeview(edit_data_screen)
-            tabel_list_barang["columns"] = ("one", "two", "three")
-            tabel_list_barang.column("#0", width=100, minwidth=100)
-            tabel_list_barang.column("one", width=300, minwidth=300)
-            tabel_list_barang.column("two", width=200, minwidth=200)
-            tabel_list_barang.column("three", width=97, minwidth=97)
+            tabel_list_barang["columns"] = ("Item", "Price", "Stock", "ID")
+            tabel_list_barang['show']='headings'
+            tabel_list_barang.column("#0", width=97, minwidth=97)
+            tabel_list_barang.column("Item", width=397, minwidth=397)
+            tabel_list_barang.column("Price", width=200, minwidth=200)
+            tabel_list_barang.column("Stock", width=97, minwidth=97)
+            tabel_list_barang.column("ID", width=97, minwidth=97)
 
-            tabel_list_barang.heading("#0", text="No")
-            tabel_list_barang.heading("one", text="Nama Barang")
-            tabel_list_barang.heading("two", text="Harga Barang")
-            tabel_list_barang.heading("three", text="Stock")
+            tabel_list_barang.heading("#0", text="ID", anchor="center")
+            tabel_list_barang.heading("Item", text="Nama Barang", anchor="center")
+            tabel_list_barang.heading("Price", text="Harga Barang",anchor="center")
+            tabel_list_barang.heading("Stock", text="Stock",anchor="center")
+            tabel_list_barang.heading("ID", text="ID", anchor='center')
 
             for i in range(len(id_barang)):
-                tabel_list_barang.insert("", i, text=str(i + 1).center(20), values=(
-                    nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
+                tabel_list_barang.insert("", i, text='', values=(
+                    nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20), str(i + 1).center(20)))
 
-            tabel_list_barang.pack()
+            tabel_list_barang.pack(fill='x')
+
+            #sorting
+            columns = ('Item', 'Price','Stock','ID')
+            for col in columns:
+                tabel_list_barang.heading(col, text=col, command=lambda _col=col:self.sorting(tabel_list_barang, _col, False))
 
             Label(edit_data_screen, text='Masukkan nama barang yg ingin di edit').pack()
             global nama_barang_edit
@@ -808,6 +822,17 @@ class minimarket:
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
+
+    def sorting(self, tabel, col, reverse):
+        l = [(tabel.set(k, col), k) for k in tabel.get_children('')]
+        l.sort(reverse=reverse)
+
+        # rearrange items in sorted positions
+        for index, (val, k) in enumerate(l):
+            tabel.move(k, '', index)
+
+        # reverse sort next time
+        tabel.heading(col, command=lambda:self.sorting(tabel, col, not reverse))
 
     def quit(self):  # exit!!!
         exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
