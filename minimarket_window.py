@@ -1,7 +1,19 @@
 import tkinter.messagebox
 import tkinter.ttk as ttk
+
 from tkinter import *
 from datetime import date
+
+#yang masih kurang
+#1. edit data,
+#2. kurangin stock
+#3. sort data
+
+#-----yg udh selesai-------
+#1. login register selesai
+#2. client melakukan pembelian
+#3. list transaksi
+#3. verifikasi add data jika ada yg sama
 
 class minimarket:
     def __init__(self, root):
@@ -16,32 +28,15 @@ class minimarket:
         menu.add_cascade(label="File", menu=subMenu)
         subMenu.add_command(label="Exit", command=self.quit)
 
-        Label(text="").pack()
-
         # judul app
         label_judul = Label(self.root, text="Mini Market Application", font=("Arial", 18, "bold"))  # create label/text
-        label_judul.pack()  # center output
+        label_judul.place(x='350', y='20',anchor='center')  # center output
 
         label_greeting = Label(self.root, text="Welcome to our App!\n\n", font=("Arial", 14, "italic"))
-        label_greeting.pack()
+        label_greeting.place(x='350', y='60',anchor='center')
 
-        # login button
-        Label(text="Sudah daftar?", font=('Arial', 14)).pack()
-        button_login = Button(text="Login", height="2", width="30", command=self.window_login).pack()
-        Label(text="\n\n\n").pack()
-
-        Label(text="Belum daftar?", font=('Arial', 14)).pack()
-
-        # register button
-        button_register = Button(text="Register", height="2", width="30", command=self.window_register).pack()
-
-        Button(text="Customer", height=2, width=30, command=self.belanja).pack()
-
-    def quit(self):  # exit!!!
-        exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
-
-        if exit_program == 'yes':
-            self.root.destroy()
+        Button(text="CUSTOMER", height=4, width=20,font=('Arial',14,'bold'), command=self.belanja).place(x='350',y='150',anchor='center')
+        Button(text="Admin", height="2", width="12", command=self.window_login).place(x='350',y='210',anchor='center')
 
     def window_register(self):
         global register_screen
@@ -71,16 +66,14 @@ class minimarket:
         global user_register_entry
         global password_register_entry
 
-        login_judul = Label(register_screen, text="Mini Market Application",
-                            font=("Arial", 18, "bold"))  # create label/text
-        login_judul.pack()  # center output
+        Label(register_screen, text="Mini Market Application",font=("Arial", 18, "bold")).pack()  # create label/text
+          # center output
 
-        login_greeting = Label(register_screen, text="Register data\n\n", font=("Arial", 14, "italic"))
-        login_greeting.pack()
+        Label(register_screen, text="Register data\n\n", font=("Arial", 14, "italic")).pack()
 
         # buat form
         Label(register_screen, text="Username: ").pack()  # username label
-        user_register_entry = Entry(register_screen, textvariable=username_register).pack()  # username box
+        Entry(register_screen, textvariable=username_register).pack()  # username box
 
         Label(register_screen, text="Password: ").pack()  # PasswordLabel
         password_register_entry = Entry(register_screen, textvariable=password_register,
@@ -205,7 +198,7 @@ class minimarket:
         session_login.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
         ##########################
 
-        session_login.title("Minimarket - Index")
+        session_login.title("Minimarket - Admin")
 
         Label(session_login, text="Selamat datang,  " + login_username + ". \nAnda login sebagai admin.",
               anchor='w').pack(fill='both')
@@ -221,8 +214,8 @@ class minimarket:
 
         # transaksi_screen.resizable(False, False)  # disable fullscreen
 
-        window_height = 350
-        window_width = 700
+        window_height = 500
+        window_width = 1000
 
         screen_width = tabel_list_barang_screen.winfo_screenwidth()
         screen_height = tabel_list_barang_screen.winfo_screenheight()
@@ -274,25 +267,24 @@ class minimarket:
             tabel_list_barang.column("two", width=200, minwidth=200)
             tabel_list_barang.column("three", width=97, minwidth=97)
 
-            tabel_list_barang.heading("#0", text="No")
-            tabel_list_barang.heading("one", text="Nama Barang")
-            tabel_list_barang.heading("two", text="Harga Barang")
-            tabel_list_barang.heading("three", text="Stock")
+            tabel_list_barang.heading("#0", text="No", anchor="center")
+            tabel_list_barang.heading("one", text="Nama Barang", anchor="center")
+            tabel_list_barang.heading("two", text="Harga Barang",anchor="center")
+            tabel_list_barang.heading("three", text="Stock",anchor="center")
 
             for i in range(len(id_barang)):
-                tabel_list_barang.insert("", i, text=str(i + 1).center(20), values=(
-                nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
+                tabel_list_barang.insert("", i, text=str(i + 1).center(40), values=(
+                nama_barang[i].center(95), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42)))
 
-            tabel_list_barang.pack()
+            tabel_list_barang.pack(fill='x', anchor='center')
             #######
-            ttk.Style().configure('green/black.TButton', foreground='green', background='black')  # configure dlu!
-            ttk.Button(tabel_list_barang_screen, text="Add data", style="green.black.TButton",
-                       command=self.add_data).pack(side="top", fill="both", expand=True)  # command
+            Button(tabel_list_barang_screen, text="Add data",
+                       command=self.add_data).pack()  # command
 
-            ttk.Button(tabel_list_barang_screen, text="Delete data", style="green.black.TButton",
+            Button(tabel_list_barang_screen, text="Delete data",
                        command=self.delete_data).pack()  # command
 
-            ttk.Button(tabel_list_barang_screen, text="Edit data", style="green.black.TButton").pack()  # command
+            Button(tabel_list_barang_screen, text="Edit data", command=self.edit_data).pack()  # command
 
     def tabel_list_transaksi(self):
         global tabel_list_penjualan_screen
@@ -300,8 +292,8 @@ class minimarket:
 
         # transaksi_screen.resizable(False, False)  # disable fullscreen
 
-        window_height = 350
-        window_width = 700
+        window_height = 500
+        window_width = 1000
 
         screen_width = tabel_list_penjualan_screen.winfo_screenwidth()
         screen_height = tabel_list_penjualan_screen.winfo_screenheight()
@@ -334,8 +326,8 @@ class minimarket:
                 fields = line.split(";")
                 id_transaksi.append(fields[0])
                 nama_barang_transaksi.append(fields[1])
-                total_harga_transaksi.append(fields[2])
-                stock_barang_transaksi.append(fields[3])
+                stock_barang_transaksi.append(fields[2])
+                total_harga_transaksi.append(fields[3])
                 tanggal_transaksi.append(fields[4])
 
             for ab in range(len(id_transaksi)):
@@ -363,12 +355,14 @@ class minimarket:
             tabel_list_transaksi.heading("four", text="Tanggal transaksi")
 
             for i in range(len(id_transaksi)):
-                tabel_list_transaksi.insert("", i, text=str(i + 1).center(20), values=(
-                    nama_barang_transaksi[i].center(75), str(stock_barang_transaksi[i]).center(50), str(total_harga_transaksi[i]).center(20), str(tanggal_transaksi[i]).center(20)))
+                tabel_list_transaksi.insert("", i, text=str(i + 1).center(25),
+                        values=(nama_barang_transaksi[i].center(85), str(total_harga_transaksi[i]).center(60), str(stock_barang_transaksi[i]).center(33), str(tanggal_transaksi[i]).center(27)))
 
-            tabel_list_transaksi.pack(fill=X)
+            tabel_list_transaksi.pack(fill='x')
+            Label(tabel_list_penjualan_screen, text="Total penjualan : Rp " +str(sum(total_harga_transaksi))).pack()
+            Label(tabel_list_penjualan_screen, text="Jumlah barang terbeli : " + str(sum(stock_barang_transaksi))).pack()
+            Button(tabel_list_penjualan_screen, text='Go back', command=tabel_list_penjualan_screen.destroy).pack()
             #######
-
 
     def add_data(self):
         global tambah_data
@@ -394,19 +388,19 @@ class minimarket:
         # nama barang
         global tambah_barang_data
         tambah_barang_data = StringVar()
-        tambah_barang = Entry(tambah_data, textvariable=tambah_barang_data).pack()
+        Entry(tambah_data, textvariable=tambah_barang_data).pack()
 
         Label(tambah_data, text='Harga barang :').pack()
         # harga barang
         global tambah_harga_data
         tambah_harga_data = StringVar()
-        tambah_harga = Entry(tambah_data, textvariable=tambah_harga_data).pack()
+        Entry(tambah_data, textvariable=tambah_harga_data).pack()
 
         Label(tambah_data, text='Stock barang :').pack()
         # stock barang
         global tambah_stock_data
         tambah_stock_data = StringVar()
-        tambah_stock = Entry(tambah_data, textvariable=tambah_stock_data).pack()
+        Entry(tambah_data, textvariable=tambah_stock_data).pack()
 
         Button(tambah_data, text="Add data!", command=self.proses_add_data).pack()
 
@@ -422,19 +416,25 @@ class minimarket:
             except ValueError:
                 tkinter.messagebox.showinfo("Error", "Harga dan stock data wajib dalam bentuk angka!")
             else:
-                try:
-                    f = open('list_barang.txt', 'a')
-                except FileNotFoundError:
-                    tkinter.messagebox.showinfo('Error', 'File tidak ditemukan')
-                else:
-                    a = len(id_barang)
-                    b = a + 1
-                    temp = str(b) + ";" + proses_tambah_data + ";" + proses_harga_data + ";" + proses_stock_data
-                    f.write(temp + "\n")
-                    f.close()
+                if int(proses_stock_data) > 0 and int(proses_harga_data) > 0:
+                    if proses_tambah_data not in nama_barang:
+                        try:
+                            f = open('list_barang.txt', 'a')
+                        except FileNotFoundError:
+                            tkinter.messagebox.showinfo('Error', 'File tidak ditemukan')
+                        else:
+                            a = len(id_barang)
+                            b = a + 1
+                            temp = str(b) + ";" + proses_tambah_data + ";" + proses_harga_data + ";" + proses_stock_data
+                            f.write(temp + "\n")
+                            f.close()
 
-                    tkinter.messagebox.showinfo('Sukses!', 'Menambahkan data sukses!')
-                    tambah_data.destroy()
+                            tkinter.messagebox.showinfo('Sukses!', 'Menambahkan data sukses!')
+                            tambah_data.destroy()
+                    else:
+                        tkinter.messagebox.showinfo("Error", "Barang tersebut sudah terdaftar!")
+                else:
+                    tkinter.messagebox.showinfo("Error", "Stock and harga barang wajib diatas 0!")
         else:
             tkinter.messagebox.showinfo('Error', 'Semua wajib di isi!')
 
@@ -462,9 +462,149 @@ class minimarket:
         # nama barang
         global delete_barang
         delete_barang = StringVar()
-        delete_barang_entry = Entry(delete_screen, textvariable=delete_barang).pack()
+        Entry(delete_screen, textvariable=delete_barang).pack()
 
         Button(delete_screen, text="Delete data!", command=self.proses_delete_data).pack()
+
+    def edit_data(self):
+        global edit_data_screen
+        edit_data_screen = Toplevel()
+
+        edit_data_screen.resizable(False, False)  # disable fullscreen
+
+        window_height = 350
+        window_width = 700
+
+        screen_width = edit_data_screen.winfo_screenwidth()
+        screen_height = edit_data_screen.winfo_screenheight()
+
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+        edit_data_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
+        ##########################
+
+        edit_data_screen.title("Minimarket - Edit data")
+
+        id_barang = []
+        nama_barang = []
+        harga_barang = []
+        stock_barang = []
+
+        try:
+            f = open('list_barang.txt', 'r')
+        except FileNotFoundError:
+            tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
+        else:
+            for line in f:
+                fields = line.split(";")
+                id_barang.append(fields[0])
+                nama_barang.append(fields[1])
+                harga_barang.append(fields[2])
+                stock_barang.append(fields[3])
+
+            for ab in range(len(id_barang)):
+                id_barang[ab] = int(id_barang[ab])
+
+            for cb in range(len(harga_barang)):
+                harga_barang[cb] = int(harga_barang[cb])
+
+            for ac in range(len(stock_barang)):
+                stock_barang[ac] = int(stock_barang[ac])
+
+            global tabel_list_barang
+            tabel_list_barang = ttk.Treeview(edit_data_screen)
+            tabel_list_barang["columns"] = ("one", "two", "three")
+            tabel_list_barang.column("#0", width=100, minwidth=100)
+            tabel_list_barang.column("one", width=300, minwidth=300)
+            tabel_list_barang.column("two", width=200, minwidth=200)
+            tabel_list_barang.column("three", width=97, minwidth=97)
+
+            tabel_list_barang.heading("#0", text="No")
+            tabel_list_barang.heading("one", text="Nama Barang")
+            tabel_list_barang.heading("two", text="Harga Barang")
+            tabel_list_barang.heading("three", text="Stock")
+
+            for i in range(len(id_barang)):
+                tabel_list_barang.insert("", i, text=str(i + 1).center(20), values=(
+                    nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
+
+            tabel_list_barang.pack()
+
+            Label(edit_data_screen, text='Masukkan nama barang yg ingin di edit').pack()
+            global nama_barang_edit
+            nama_barang_edit = StringVar()
+            Entry(edit_data_screen, textvariable=nama_barang_edit).pack()
+            Button(edit_data_screen, text='Cari', command=self.proses_edit_data).pack()
+
+    def proses_edit_data(self):
+        global get_edit_nama_barang
+        get_edit_nama_barang = nama_barang_edit.get()
+        if get_edit_nama_barang in nama_barang:
+            get_index_barang = nama_barang.index(get_edit_nama_barang)
+
+            global proses_edit_screen
+            proses_edit_screen = Toplevel()
+
+            proses_edit_screen.resizable(False, False)  # disable fullscreen
+
+            window_height = 350
+            window_width = 700
+
+            screen_width = proses_edit_screen.winfo_screenwidth()
+            screen_height = proses_edit_screen.winfo_screenheight()
+
+            x_coordinate = int((screen_width / 2) - (window_width / 2))
+            y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+            proses_edit_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
+            ##########################
+
+            proses_edit_screen.title("Minimarket - Edit data")
+
+            Label(proses_edit_screen, text='Anda akan edit barang "'+get_edit_nama_barang+'".').pack()
+
+            harga_barang_edit = harga_barang[get_index_barang]
+            stock_barang_edit = stock_barang[get_index_barang]
+
+            global harga_barang_edit_final
+            global stock_barang_edit_final
+            harga_barang_edit_final = StringVar()
+            stock_barang_edit_final = StringVar()
+
+            Label(proses_edit_screen, text='Harga barang').pack()
+            e = Entry(proses_edit_screen, textvariable=harga_barang_edit_final)
+            e.insert(0, harga_barang_edit)
+            e.pack()
+
+            Label(proses_edit_screen, text='Stock barang').pack()
+            f = Entry(proses_edit_screen, textvariable=stock_barang_edit_final)
+            f.insert(0, stock_barang_edit)
+            f.pack()
+
+            Button(proses_edit_screen, text='Simpan barang', command=self.verifikasi_edit_data).pack()
+        else:
+            tkinter.messagebox.showinfo("Error","Barang tidak ditemukan!")
+
+    def verifikasi_edit_data(self):
+        harga_barang_verifikasi = harga_barang_edit_final.get()
+        stock_barang_verifikasi = stock_barang_edit_final.get()
+
+        try:
+            a = int(harga_barang_verifikasi)
+            b = int(stock_barang_verifikasi)
+        except ValueError:
+            tkinter.messagebox.showinfo('Error','Stock atau harga barang wajib dalam bentuk angka!')
+        else:
+            try:
+                f = open('list_barang.txt','a')
+            except FileNotFoundError:
+                tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
+            else:
+                count = len(open("list_barang.txt").readlines())
+                temp = str(count+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b)
+                f.write(temp + "\n")
+                f.close()
 
     def proses_delete_data(self):
         del_data = delete_barang.get()
@@ -627,7 +767,7 @@ class minimarket:
 
                             Label(pembayaran_screen, text="Anda akan melakukan pembelian barang " + str(
                                 barang_checkout) + " dengan total harga Rp" + str(total_harga_barang) + ".").pack()
-                            Label(pembayaran_screen, text="Masukkan jumlah yg harus dibayar:").pack()
+                            Label(pembayaran_screen, text="Masukkan nominal uang anda:").pack()
 
                             global uang_dibayar
                             uang_dibayar = StringVar()
@@ -662,12 +802,18 @@ class minimarket:
                         f.write(temp + "\n")
                         f.close()
                 else:
-                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp " + str(
-                        int(jumlah_yg_dibayar) - int(total_harga_barang)) + ".").pack()
+                    c = int(jumlah_yg_dibayar) - int(total_harga_barang)
+
+                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp " + str(c) + ".").pack()
                     Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
 
+    def quit(self):  # exit!!!
+        exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
+
+        if exit_program == 'yes':
+            self.root.destroy()
 
 if __name__ == '__main__':
     #######################
