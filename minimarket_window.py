@@ -10,7 +10,7 @@ from datetime import date
 #3.tampilan edit data kurang efisien
 
 #-----yg udh selesai-------
-#1. login register selesai
+#1. login selesai
 #2. client melakukan pembelian
 #3. list transaksi
 #3. verifikasi add data jika ada yg sama
@@ -82,21 +82,6 @@ class minimarket:
 
         Button(register_screen, text="Register", height="2", width="10",
                                command=self.register_user).pack()  # login button
-
-    def register_user(self):
-        username_data = username_register.get()
-        password_data = password_register.get()
-
-        if username_data == " " or password_data == " ":
-            tkinter.messagebox.showinfo('Error', 'Wajib diisi semuanya!')
-        else:
-            file = open("saved_id.txt", "a")
-            temp = username_data + ";" + password_data
-            file.write(temp + "\n")
-            file.close()
-
-            tkinter.messagebox.showinfo('Sukses', 'Sukses menambahkan!')
-            register_screen.destroy()
 
     def window_login(self):
         global login_screen
@@ -252,39 +237,37 @@ class minimarket:
                 harga_barang.append(fields[2])
                 stock_barang.append(fields[3])
 
-            for ab in range(len(id_barang)):
-                id_barang[ab] = int(id_barang[ab])
+            scrollbar = Scrollbar(tabel_list_barang_screen, orient="vertical", command=self.scrolling)
 
-            for cb in range(len(harga_barang)):
-                harga_barang[cb] = int(harga_barang[cb])
+            Label(tabel_list_barang_screen,text="Nama barang",font=("Arial",14,"bold")).place(x='460',y='20',anchor='center')
+            global listbox_tabel_nama_barang
+            listbox_tabel_nama_barang = Listbox(tabel_list_barang_screen,width=30, height=10, yscrollcommand=scrollbar.set)
+            for task in range(len(nama_barang)):
+                listbox_tabel_nama_barang.insert("end", nama_barang[task])
+            listbox_tabel_nama_barang.place(x='440',y='120',anchor='center')
 
-            for ac in range(len(stock_barang)):
-                stock_barang[ac] = int(stock_barang[ac])
+            Label(tabel_list_barang_screen, text="Harga", font=("Arial", 14, "bold")).place(x='620', y='20',anchor='center')
+            global listbox_tabel_harga_barang
+            listbox_tabel_harga_barang = Listbox(tabel_list_barang_screen,width=10, height=10, yscrollcommand=scrollbar.set)
+            for task in range(len(harga_barang)):
+                listbox_tabel_harga_barang.insert("end", harga_barang[task])
+            listbox_tabel_harga_barang.place(x='620', y='120', anchor='center')
 
-            global tabel_list_barang
-            tabel_list_barang = ttk.Treeview(tabel_list_barang_screen)
-            tabel_list_barang["columns"] = ("Item", "Price", "Stock", "ID")
-            tabel_list_barang['show']='headings'
-            tabel_list_barang.column("#0", width=97, minwidth=97)
-            tabel_list_barang.column("Item", width=397, minwidth=397)
-            tabel_list_barang.column("Price", width=200, minwidth=200)
-            tabel_list_barang.column("Stock", width=97, minwidth=97)
-            tabel_list_barang.column("ID", width=97, minwidth=97)
+            Label(tabel_list_barang_screen, text="Stock", font=("Arial", 14, "bold")).place(x='710', y='20',anchor='center')
+            global listbox_tabel_stock_barang
+            listbox_tabel_stock_barang = Listbox(tabel_list_barang_screen,width=10, yscrollcommand=scrollbar.set)
+            for task in range(len(stock_barang)):
+                listbox_tabel_stock_barang.insert("end", stock_barang[task])
+            listbox_tabel_stock_barang.place(x='710', y='120', anchor='center')
 
-            tabel_list_barang.heading("#0", text="ID", anchor="center")
-            tabel_list_barang.heading("Item", text="Nama Barang", anchor="center")
-            tabel_list_barang.heading("Price", text="Harga Barang",anchor="center")
-            tabel_list_barang.heading("Stock", text="Stock",anchor="center")
-            tabel_list_barang.heading("ID", text="ID", anchor='center')
-
-            for i in range(len(id_barang)):
-                tabel_list_barang.insert("", i,text='' ,values=(nama_barang[i].center(95), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42), str(id_barang[i]).center(20)))
-
-            columns = ('Item', 'Price','Stock','ID')
-            for col in columns:
-                tabel_list_barang.heading(col, text=col, command=lambda _col=col:self.sorting(tabel_list_barang, _col, False))
-
-            tabel_list_barang.pack(fill='x', anchor='center')
+            scrollbar.pack(side="right", fill="y")
+            # for i in range(len(id_barang)):
+            #     tabel_list_barang.insert("", i,text='' ,values=(
+            #         nama_barang[i].center(123), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42), str(id_barang[i]).center(43)))
+            #
+            # columns = ('Item', 'Price','Stock','ID')
+            # for col in columns:
+            #     tabel_list_barang.heading(col, text=col, command=lambda _col=col:self.sorting(tabel_list_barang, _col, False))
 
         ############# ADD DATA ##############
         Label(tabel_list_barang_screen, text='Add data', font=("Arial", 15,"bold")).place(x='150', y='220', anchor='center') #y vertical, x horizontal
@@ -306,7 +289,6 @@ class minimarket:
 
         Button(tabel_list_barang_screen, text="Add!", command=self.proses_add_data).place(x='150',y='340',anchor='center')
 
-
         ############# EDIT DATA ##############
         Label(tabel_list_barang_screen, text='Edit data', font=("Arial", 15, "bold")).place(x='500', y='220',anchor='center')  # y vertical, x horizontal
         Label(tabel_list_barang_screen, text='Masukkan nama barang :').place(x='420',y='250',anchor='center')
@@ -322,6 +304,63 @@ class minimarket:
         delete_barang = StringVar()
         Entry(tabel_list_barang_screen, textvariable=delete_barang).place(x='970',y='250',anchor='center')
         Button(tabel_list_barang_screen, text="Delete!", command=self.proses_delete_data).place(x='870',y='280',anchor='center')
+
+        Button(tabel_list_barang_screen, text="Sort Alphabetically",height=2,width=10,command=self.sort_barang).place(x='200',y='120',anchor='center')
+
+    def sort_barang(self):
+
+        for i in range(len(nama_barang)-1,0,-1):
+            for j in range(i):
+                if nama_barang[j]>nama_barang[j+1]:
+                    temp = nama_barang[j]
+                    nama_barang[j] = nama_barang[j+1]
+                    nama_barang[j+1] = temp
+
+        Button(tabel_list_barang_screen, text="Unsort", height=2, width=10, command=self.unsort_barang).place(x='200', y='120', anchor='center')
+        self.clear_nama_barang_listbox()
+
+        index = []
+        for barang in nama_barang:
+            listbox_tabel_nama_barang.insert("end", barang)
+
+        for i in range(len(nama_barang)):
+            c = listbox_tabel_nama_barang.get(0,"end").index(nama_barang[i])
+            index.append(c)
+
+
+    def unsort_barang(self):
+        self.clear_nama_barang_listbox()
+
+        id_barang = []
+        nama_barang = []
+        harga_barang = []
+        stock_barang = []
+
+        try:
+            f = open("list_barang.txt",'r')
+        except FileNotFoundError:
+            tkinter.messagebox.showinfo("Error","File tidak ditemukan!")
+        else:
+            for line in f:
+                fields = line.split(";")
+                id_barang.append(fields[0])
+                nama_barang.append(fields[1])
+                harga_barang.append(fields[2])
+                stock_barang.append(fields[3])
+
+            for barang in nama_barang:
+                listbox_tabel_nama_barang.insert("end", barang)
+            for harga in harga_barang:
+                listbox_tabel_harga_barang.insert("end", harga)
+            for stock in stock_barang:
+                listbox_tabel_stock_barang.insert("end", stock)
+
+            Button(tabel_list_barang_screen, text="Sort", height=2, width=10, command=self.sort_barang).place(x='200',y='120',anchor='center')
+
+    def scrolling(self,*args):
+        listbox_tabel_nama_barang.yview(*args)
+        listbox_tabel_harga_barang.yview(*args)
+        listbox_tabel_stock_barang.yview(*args)
 
     def proses_add_data(self):
         proses_tambah_data = tambah_barang_data.get()
@@ -348,7 +387,20 @@ class minimarket:
                             f.write(temp + "\n")
                             f.close()
 
+                            nama_barang.append(proses_tambah_data)
+                            harga_barang.append(proses_harga_data)
+                            stock_barang.append(proses_stock_data)
+
                             tkinter.messagebox.showinfo('Sukses!', 'Menambahkan data sukses!')
+
+                            self.clear_nama_barang_listbox()
+
+                            for barang in nama_barang:
+                                listbox_tabel_nama_barang.insert("end", barang)
+                            for harga in harga_barang:
+                                listbox_tabel_harga_barang.insert("end", harga)
+                            for stock in stock_barang:
+                                listbox_tabel_stock_barang.insert("end", stock)
                     else:
                         tkinter.messagebox.showinfo("Error", "Barang tersebut sudah terdaftar!")
                 else:
@@ -416,15 +468,32 @@ class minimarket:
         except ValueError:
             tkinter.messagebox.showinfo('Error','Stock atau harga barang wajib dalam bentuk angka!')
         else:
-            try:
-                f = open('list_barang.txt','a')
-            except FileNotFoundError:
-                tkinter.messagebox.showinfo('Error', 'File tidak ditemukan!')
-            else:
-                count = len(open("list_barang.txt").readlines())
-                temp = str(count+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b)
-                f.write(temp + "\n")
-                f.close()
+            exp = nama_barang.index(get_edit_nama_barang)  # ambil index id supaya keliatan di line berapa di dlm file
+            with open("list_barang.txt", "r") as f:
+                lines = f.readlines()
+                temp = str(int(id_barang[exp]))+";"+get_edit_nama_barang + ";" + str(harga_barang[exp]) + ";" + str(stock_barang[exp])
+                print(temp)
+                lines.remove(temp) #dihilangin baris yg sblmnya
+                with open("temp_barang.txt", "w") as new_f: #save di temp dlu
+                    for line in lines:
+                        new_f.write(line)
+
+            with open("temp_barang.txt", 'r') as f:
+                d = f.readlines()
+                with open("temp_barang.txt", 'w') as f:
+                    for i,line in enumerate(d): #menggunakan enumerate untuk melihat index setiap baris
+                        if i == exp: #check jika garis tersebut cocok dengan id barang datanya, maka
+                            temp = str(int(exp)+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b) #mengisi index yang kosong tadi
+                            print(temp)
+                            f.write(temp)
+                            tkinter.messagebox.showinfo("Sukses", "Data sukses diubah!")
+                        f.write(line)
+
+            with open("temp_barang.txt",'r') as f:
+                c = f.readlines()
+                with open("list_barang.txt",'w') as j:
+                    for line in c:
+                        j.write(line)
 
     def proses_delete_data(self):
         del_data = delete_barang.get()
@@ -706,16 +775,11 @@ class minimarket:
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
 
-    def sorting(self, tabel, col, reverse):
-        l = [(tabel.set(k, col), k) for k in tabel.get_children('')]
-        l.sort(reverse=reverse)
-
-        # rearrange items in sorted positions
-        for index, (val, k) in enumerate(l):
-            tabel.move(k, '', index)
-
-        # reverse sort next time
-        tabel.heading(col, command=lambda:self.sorting(tabel, col, not reverse))
+    def clear_nama_barang_listbox(self):
+        #ini dipake untuk refresh data yang ada di listbox
+        listbox_tabel_nama_barang.delete(0,"end")
+        listbox_tabel_harga_barang.delete(0,"end")
+        listbox_tabel_stock_barang.delete(0,"end")
 
     def quit(self):  # exit!!!
         exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
@@ -745,3 +809,48 @@ if __name__ == '__main__':
 
     root.mainloop()  # loop supaya app jalan terus
 
+
+
+# exp=1
+# with open("list_barang.txt", 'r') as f:
+#     lines = f.readlines()
+
+# with open("list_barang.txt", 'w') as f:
+#     for i,line in enumerate(lines):
+#         if i == exp:
+#             f.write('asdd\n')
+#         f.write(line)
+
+# with open("list_barang.txt", "r") as f:
+#     lines = f.readlines()
+#     lines.remove("2;Wortel;3000;40\n")  #3;Wortel;3000;40 nanti di ganti dari data sebelumnya
+#     with open("temp_barang.txt", "w") as new_f:
+#         for line in lines:
+#             new_f.write(line)
+
+# f = open("list_barang.txt",'r')
+# g = open("temp_barang.txt",'w')
+# d = f.readlines()
+# for line in f:
+#     fields = line.split(";")
+#     id_barang.append(fields[0])
+#     nama_barang.append(fields[1])
+#     harga_barang.append(fields[2])
+#     stock_barang.append(fields[3])
+#
+# if "Wortel" in nama_barang:
+#     indexing = nama_barang.index("Wortel") #dapet index barang
+#     harga_barang[indexing] = a #tuker harganya
+#     stock_barang[indexing] = b #tuker stocknya
+#
+#     temp = id_barang[indexing]+";"+nama_barang[indexing]+";"+harga_barang[indexing]+";"+stock_barang[indexing]
+#     print(temp)
+#     g.write(temp)
+#
+#
+# for i in d:
+#     if "Wortel" not in i:
+#         g.write(i)
+#
+# g.close()
+# f.close()
