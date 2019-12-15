@@ -51,10 +51,10 @@ class minimarket:
         screen_width = register_screen.winfo_screenwidth()
         screen_height = register_screen.winfo_screenheight()
 
-        x_cordinate = int((screen_width / 2) - (window_width / 2))
-        y_cordinate = int((screen_height / 2) - (window_height / 2))
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-        register_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        register_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
         ##########################
 
         register_screen.title("Minimarket - Register")
@@ -95,10 +95,10 @@ class minimarket:
         screen_width = login_screen.winfo_screenwidth()
         screen_height = login_screen.winfo_screenheight()
 
-        x_cordinate = int((screen_width / 2) - (window_width / 2))
-        y_cordinate = int((screen_height / 2) - (window_height / 2))
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-        login_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        login_screen.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
         ##########################
 
         login_screen.title("Minimarket - Login")
@@ -261,13 +261,6 @@ class minimarket:
             listbox_tabel_stock_barang.place(x='710', y='120', anchor='center')
 
             scrollbar.pack(side="right", fill="y")
-            # for i in range(len(id_barang)):
-            #     tabel_list_barang.insert("", i,text='' ,values=(
-            #         nama_barang[i].center(123), str(harga_barang[i]).center(70), str(stock_barang[i]).center(42), str(id_barang[i]).center(43)))
-            #
-            # columns = ('Item', 'Price','Stock','ID')
-            # for col in columns:
-            #     tabel_list_barang.heading(col, text=col, command=lambda _col=col:self.sorting(tabel_list_barang, _col, False))
 
         ############# ADD DATA ##############
         Label(tabel_list_barang_screen, text='Add data', font=("Arial", 15,"bold")).place(x='150', y='220', anchor='center') #y vertical, x horizontal
@@ -305,7 +298,7 @@ class minimarket:
         Entry(tabel_list_barang_screen, textvariable=delete_barang).place(x='970',y='250',anchor='center')
         Button(tabel_list_barang_screen, text="Delete!", command=self.proses_delete_data).place(x='870',y='280',anchor='center')
 
-        Button(tabel_list_barang_screen, text="Sort Alphabetically",height=2,width=10,command=self.sort_barang).place(x='200',y='120',anchor='center')
+        Button(tabel_list_barang_screen, text="Sort",height=2,width=10,command=self.sort_barang).place(x='200',y='120',anchor='center')
 
     def sort_barang(self):
 
@@ -326,7 +319,6 @@ class minimarket:
         for i in range(len(nama_barang)):
             c = listbox_tabel_nama_barang.get(0,"end").index(nama_barang[i])
             index.append(c)
-
 
     def unsort_barang(self):
         self.clear_nama_barang_listbox()
@@ -367,7 +359,11 @@ class minimarket:
         proses_harga_data = tambah_harga_data.get()
         proses_stock_data = tambah_stock_data.get()
 
-        if proses_tambah_data != ' ' and proses_harga_data != ' ' and proses_stock_data != ' ':
+        check_tambah_data = proses_tambah_data.isspace()
+        check_harga_data = proses_tambah_data.isspace()
+        check_stock_data = proses_stock_data.isspace()
+
+        if check_tambah_data == False and check_harga_data == False and check_stock_data == False:
             try:
                 i = int(proses_harga_data)
                 j = int(proses_stock_data)
@@ -383,7 +379,7 @@ class minimarket:
                         else:
                             a = len(id_barang)
                             b = a + 1
-                            temp = str(b) + ";" + proses_tambah_data + ";" + proses_harga_data + ";" + proses_stock_data
+                            temp = str(b) + ";" + proses_tambah_data.strip() + ";" + proses_harga_data.replace(" ", "") + ";" + proses_stock_data.replace(" ", "")
                             f.write(temp + "\n")
                             f.close()
 
@@ -468,26 +464,31 @@ class minimarket:
         except ValueError:
             tkinter.messagebox.showinfo('Error','Stock atau harga barang wajib dalam bentuk angka!')
         else:
-            exp = nama_barang.index(get_edit_nama_barang)  # ambil index id supaya keliatan di line berapa di dlm file
+            x = nama_barang.index(get_edit_nama_barang)  # ambil index id supaya keliatan di line berapa di dlm file
             with open("list_barang.txt", "r") as f:
                 lines = f.readlines()
-                temp = str(int(id_barang[exp]))+";"+get_edit_nama_barang + ";" + str(harga_barang[exp]) + ";" + str(stock_barang[exp])
-                print(temp)
-                lines.remove(temp) #dihilangin baris yg sblmnya
+                tempp = str(int(id_barang[x]))+";"+get_edit_nama_barang + ";" + str(harga_barang[x]) + ";" + str(stock_barang[x])
+                lines.remove(tempp) #dihilangin baris yg sblmnya
+                temp_2 = str(int(x)+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b) #mengisi index yang kosong tadi
+
+                with open("temp_barang.txt", 'r') as f:
+                    d = f.readlines()
+                    with open("temp_barang.txt", 'w') as output:
+                        for i, line in enumerate(d):  # menggunakan enumerate untuk melihat index setiap baris
+                            if i == x:  # check jika garis tersebut cocok dengan id barang datanya, maka
+                                temp = str(int(x) + 1) + ";" + get_edit_nama_barang + ";" + str(a) + ";" + str(b)  # mengisi index yang kosong tadi
+                                output.write(temp + "\n")
+                            else:
+                                temp = str(int(x) + 1) + ";" + get_edit_nama_barang + ";" + str(a) + ";" + str(b)  # mengisi index yang kosong tadi
+                                output.write(temp + "\n")
+                            output.write(line)
+
                 with open("temp_barang.txt", "w") as new_f: #save di temp dlu
                     for line in lines:
                         new_f.write(line)
+                    new_f.write(temp_2+"\n")
 
-            with open("temp_barang.txt", 'r') as f:
-                d = f.readlines()
-                with open("temp_barang.txt", 'w') as f:
-                    for i,line in enumerate(d): #menggunakan enumerate untuk melihat index setiap baris
-                        if i == exp: #check jika garis tersebut cocok dengan id barang datanya, maka
-                            temp = str(int(exp)+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b) #mengisi index yang kosong tadi
-                            print(temp)
-                            f.write(temp)
-                            tkinter.messagebox.showinfo("Sukses", "Data sukses diubah!")
-                        f.write(line)
+                    tkinter.messagebox.showinfo("Sukses", "Data sukses diubah!")
 
             with open("temp_barang.txt",'r') as f:
                 c = f.readlines()
@@ -799,58 +800,12 @@ if __name__ == '__main__':
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
 
-    x_cordinate = int((screen_width / 2) - (window_width / 2))
-    y_cordinate = int((screen_height / 2) - (window_height / 2))
+    x_coordinate = int((screen_width / 2) - (window_width / 2))
+    y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-    root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+    root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
     ##########################
 
     application = minimarket(root)  # access class
 
-    root.mainloop()  # loop supaya app jalan terus
-
-
-
-# exp=1
-# with open("list_barang.txt", 'r') as f:
-#     lines = f.readlines()
-
-# with open("list_barang.txt", 'w') as f:
-#     for i,line in enumerate(lines):
-#         if i == exp:
-#             f.write('asdd\n')
-#         f.write(line)
-
-# with open("list_barang.txt", "r") as f:
-#     lines = f.readlines()
-#     lines.remove("2;Wortel;3000;40\n")  #3;Wortel;3000;40 nanti di ganti dari data sebelumnya
-#     with open("temp_barang.txt", "w") as new_f:
-#         for line in lines:
-#             new_f.write(line)
-
-# f = open("list_barang.txt",'r')
-# g = open("temp_barang.txt",'w')
-# d = f.readlines()
-# for line in f:
-#     fields = line.split(";")
-#     id_barang.append(fields[0])
-#     nama_barang.append(fields[1])
-#     harga_barang.append(fields[2])
-#     stock_barang.append(fields[3])
-#
-# if "Wortel" in nama_barang:
-#     indexing = nama_barang.index("Wortel") #dapet index barang
-#     harga_barang[indexing] = a #tuker harganya
-#     stock_barang[indexing] = b #tuker stocknya
-#
-#     temp = id_barang[indexing]+";"+nama_barang[indexing]+";"+harga_barang[indexing]+";"+stock_barang[indexing]
-#     print(temp)
-#     g.write(temp)
-#
-#
-# for i in d:
-#     if "Wortel" not in i:
-#         g.write(i)
-#
-# g.close()
-# f.close()
+    root.mainloop()
