@@ -237,30 +237,12 @@ class minimarket:
                 harga_barang.append(fields[2])
                 stock_barang.append(fields[3])
 
-            scrollbar = Scrollbar(tabel_list_barang_screen, orient="vertical", command=self.scrolling)
-
             Label(tabel_list_barang_screen,text="Nama barang",font=("Arial",14,"bold")).place(x='460',y='20',anchor='center')
             global listbox_tabel_nama_barang
-            listbox_tabel_nama_barang = Listbox(tabel_list_barang_screen,width=30, height=10, yscrollcommand=scrollbar.set)
+            listbox_tabel_nama_barang = Listbox(tabel_list_barang_screen,width=50, height=10)
             for task in range(len(nama_barang)):
                 listbox_tabel_nama_barang.insert("end", nama_barang[task])
-            listbox_tabel_nama_barang.place(x='440',y='120',anchor='center')
-
-            Label(tabel_list_barang_screen, text="Harga", font=("Arial", 14, "bold")).place(x='620', y='20',anchor='center')
-            global listbox_tabel_harga_barang
-            listbox_tabel_harga_barang = Listbox(tabel_list_barang_screen,width=10, height=10, yscrollcommand=scrollbar.set)
-            for task in range(len(harga_barang)):
-                listbox_tabel_harga_barang.insert("end", harga_barang[task])
-            listbox_tabel_harga_barang.place(x='620', y='120', anchor='center')
-
-            Label(tabel_list_barang_screen, text="Stock", font=("Arial", 14, "bold")).place(x='710', y='20',anchor='center')
-            global listbox_tabel_stock_barang
-            listbox_tabel_stock_barang = Listbox(tabel_list_barang_screen,width=10, yscrollcommand=scrollbar.set)
-            for task in range(len(stock_barang)):
-                listbox_tabel_stock_barang.insert("end", stock_barang[task])
-            listbox_tabel_stock_barang.place(x='710', y='120', anchor='center')
-
-            scrollbar.pack(side="right", fill="y")
+            listbox_tabel_nama_barang.place(x='550',y='120',anchor='center')
 
         ############# ADD DATA ##############
         Label(tabel_list_barang_screen, text='Add data', font=("Arial", 15,"bold")).place(x='150', y='220', anchor='center') #y vertical, x horizontal
@@ -298,10 +280,19 @@ class minimarket:
         Entry(tabel_list_barang_screen, textvariable=delete_barang).place(x='970',y='250',anchor='center')
         Button(tabel_list_barang_screen, text="Delete!", command=self.proses_delete_data).place(x='870',y='280',anchor='center')
 
-        Button(tabel_list_barang_screen, text="Sort",height=2,width=10,command=self.sort_barang).place(x='200',y='120',anchor='center')
+        global b
+        b = Button(tabel_list_barang_screen, text="Sort nama",height=2,width=10,command=self.sort_nama_barang)
+        b.place(x='200',y='70',anchor='center')
 
-    def sort_barang(self):
+        global c
+        c = Button(tabel_list_barang_screen, text="Sort harga", height=2, width=10, command=self.sort_harga_barang)
+        c.place(x='200', y='110', anchor='center')
 
+        global d
+        d = Button(tabel_list_barang_screen, text="Sort stock", height=2, width=10, command=self.sort_stock_barang)
+        d.place(x='200', y='150', anchor='center')
+
+    def sort_nama_barang(self):
         for i in range(len(nama_barang)-1,0,-1):
             for j in range(i):
                 if nama_barang[j]>nama_barang[j+1]:
@@ -309,24 +300,38 @@ class minimarket:
                     nama_barang[j] = nama_barang[j+1]
                     nama_barang[j+1] = temp
 
-        Button(tabel_list_barang_screen, text="Unsort", height=2, width=10, command=self.unsort_barang).place(x='200', y='120', anchor='center')
+        Button(tabel_list_barang_screen, text="Unsort", height=2, width=10, command=self.unsort_barang).place(x='200', y='70', anchor='center')
+
         self.clear_nama_barang_listbox()
 
-        index = []
-        for barang in nama_barang:
-            listbox_tabel_nama_barang.insert("end", barang)
+        # b.place_forget()
+        # c.place_forget()
+        # d.place_forget()
 
         for i in range(len(nama_barang)):
-            c = listbox_tabel_nama_barang.get(0,"end").index(nama_barang[i])
-            index.append(c)
+            listbox_tabel_nama_barang.insert("end", nama_barang[i]+" "+harga_barang[i]+" "+stock_barang[i])
+
+    #masih error
+    def sort_harga_barang(self):
+        harga_barang.sort()
+        Button(tabel_list_barang_screen, text="Unsort", height=2, width=10, command=self.unsort_barang).place(x='200', y='110', anchor='center')
+
+        self.clear_nama_barang_listbox()
+
+        for i in range(len(harga_barang)):
+            listbox_tabel_nama_barang.insert("end", nama_barang[i]+" "+harga_barang[i]+" "+stock_barang[i])
+
+    #masih error
+    def sort_stock_barang(self):
+        stock_barang.sort()
+        Button(tabel_list_barang_screen, text="Unsort", height=2, width=10, command=self.unsort_barang).place(x='200', y='150', anchor='center')
+        self.clear_nama_barang_listbox()
+
+        for i in range(len(stock_barang)):
+            listbox_tabel_nama_barang.insert("end", nama_barang[i]+" "+harga_barang[i]+" "+stock_barang[i])
 
     def unsort_barang(self):
         self.clear_nama_barang_listbox()
-
-        id_barang = []
-        nama_barang = []
-        harga_barang = []
-        stock_barang = []
 
         try:
             f = open("list_barang.txt",'r')
@@ -340,19 +345,14 @@ class minimarket:
                 harga_barang.append(fields[2])
                 stock_barang.append(fields[3])
 
-            for barang in nama_barang:
-                listbox_tabel_nama_barang.insert("end", barang)
-            for harga in harga_barang:
-                listbox_tabel_harga_barang.insert("end", harga)
-            for stock in stock_barang:
-                listbox_tabel_stock_barang.insert("end", stock)
+            for i in range(len(id_barang)):
+                listbox_tabel_nama_barang.insert("end", nama_barang[i]+" "+harga_barang[i]+" "+stock_barang[i])
 
-            Button(tabel_list_barang_screen, text="Sort", height=2, width=10, command=self.sort_barang).place(x='200',y='120',anchor='center')
+        Button(tabel_list_barang_screen, text="Sort nama",height=2,width=10,command=self.sort_nama_barang).place(x='200', y='70', anchor='center')
 
-    def scrolling(self,*args):
-        listbox_tabel_nama_barang.yview(*args)
-        listbox_tabel_harga_barang.yview(*args)
-        listbox_tabel_stock_barang.yview(*args)
+        Button(tabel_list_barang_screen, text="Sort harga", height=2, width=10, command=self.sort_harga_barang).place(x='200', y='110', anchor='center')
+
+        Button(tabel_list_barang_screen, text="Sort stock", height=2, width=10, command=self.sort_stock_barang).place(x='200', y='150', anchor='center')
 
     def proses_add_data(self):
         proses_tambah_data = tambah_barang_data.get()
@@ -393,10 +393,10 @@ class minimarket:
 
                             for barang in nama_barang:
                                 listbox_tabel_nama_barang.insert("end", barang)
-                            for harga in harga_barang:
-                                listbox_tabel_harga_barang.insert("end", harga)
-                            for stock in stock_barang:
-                                listbox_tabel_stock_barang.insert("end", stock)
+                            # for harga in harga_barang:
+                            #     listbox_tabel_harga_barang.insert("end", harga)
+                            # for stock in stock_barang:
+                            #     listbox_tabel_stock_barang.insert("end", stock)
                     else:
                         tkinter.messagebox.showinfo("Error", "Barang tersebut sudah terdaftar!")
                 else:
@@ -453,7 +453,6 @@ class minimarket:
         else:
             tkinter.messagebox.showinfo("Error","Barang tidak ditemukan!")
 
-    #blm SELESAI!!!!
     def verifikasi_edit_data(self):
         harga_barang_verifikasi = harga_barang_edit_final.get()
         stock_barang_verifikasi = stock_barang_edit_final.get()
@@ -467,34 +466,37 @@ class minimarket:
             x = nama_barang.index(get_edit_nama_barang)  # ambil index id supaya keliatan di line berapa di dlm file
             with open("list_barang.txt", "r") as f:
                 lines = f.readlines()
-                tempp = str(int(id_barang[x]))+";"+get_edit_nama_barang + ";" + str(harga_barang[x]) + ";" + str(stock_barang[x])
-                lines.remove(tempp) #dihilangin baris yg sblmnya
-                temp_2 = str(int(x)+1)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b) #mengisi index yang kosong tadi
+                tempp = str(int(id_barang[x]))+";"+get_edit_nama_barang + ";" + str(harga_barang[x]) + ";" + str(stock_barang[x]) #data sebelum nya
+                temp_2 = str(int(x)+2)+";"+get_edit_nama_barang+";"+str(a)+";"+str(b) #data yang baru
+                lines.remove(tempp)
 
                 with open("temp_barang.txt", 'r') as f:
                     d = f.readlines()
-                    with open("temp_barang.txt", 'w') as output:
-                        for i, line in enumerate(d):  # menggunakan enumerate untuk melihat index setiap baris
-                            if i == x:  # check jika garis tersebut cocok dengan id barang datanya, maka
-                                temp = str(int(x) + 1) + ";" + get_edit_nama_barang + ";" + str(a) + ";" + str(b)  # mengisi index yang kosong tadi
-                                output.write(temp + "\n")
-                            else:
-                                temp = str(int(x) + 1) + ";" + get_edit_nama_barang + ";" + str(a) + ";" + str(b)  # mengisi index yang kosong tadi
-                                output.write(temp + "\n")
-                            output.write(line)
+                with open("temp_barang.txt", 'w') as output:
+                    for i, line in enumerate(d):  # menggunakan enumerate untuk melihat index setiap baris
+                        if i == x:  # check jika garis tersebut cocok dengan id barang datanya, maka
+                            output.write(temp_2 + "\n")
+                            print("Ohhh")
+                        output.write(line)
 
                 with open("temp_barang.txt", "w") as new_f: #save di temp dlu
                     for line in lines:
                         new_f.write(line)
                     new_f.write(temp_2+"\n")
 
-                    tkinter.messagebox.showinfo("Sukses", "Data sukses diubah!")
-
             with open("temp_barang.txt",'r') as f:
                 c = f.readlines()
                 with open("list_barang.txt",'w') as j:
                     for line in c:
                         j.write(line)
+
+            self.clear_nama_barang_listbox()
+
+            for barang in nama_barang:
+                listbox_tabel_nama_barang.insert("end", barang)
+
+            tkinter.messagebox.showinfo("Sukses", "Data sukses diubah!")
+            proses_edit_screen.destroy()
 
     def proses_delete_data(self):
         del_data = delete_barang.get()
@@ -644,9 +646,14 @@ class minimarket:
             tabel_barang.heading("#0", text="No")
             tabel_barang.heading("one", text="Nama Barang")
             tabel_barang.heading("two", text="Harga Barang")
+            tabel_barang.heading("three", text="Stock")
 
             for i in range(len(id_barang)):
-                tabel_barang.insert("", i, text=str(i + 1).center(20), values=(
+                if int(stock_barang[i]) == 0:
+                    tabel_barang.insert("", i, text=str(i + 1).center(20), values=(
+                        nama_barang[i].center(75), str(harga_barang[i]).center(50), "Habis".center(20)))
+                else:
+                    tabel_barang.insert("", i, text=str(i + 1).center(20), values=(
                     nama_barang[i].center(75), str(harga_barang[i]).center(50), str(stock_barang[i]).center(20)))
 
             tabel_barang.pack()
@@ -739,23 +746,87 @@ class minimarket:
                             global uang_dibayar
                             uang_dibayar = StringVar()
                             Entry(pembayaran_screen, textvariable=uang_dibayar).pack()
-                            Button(pembayaran_screen, text="Bayar", command=self.proses_pembayaran).pack()
+                            Button(pembayaran_screen, text="Bayar!", command=self.proses_pembayaran).pack()
 
                         else:
                             tkinter.messagebox.showinfo("Maaf", "Jumlah barang yg ada kurang dari permintaan!")
+                            pembayaran_screen.destroy()
                     else:
                         tkinter.messagebox.showinfo("Error", "Stock wajib >0!")
+                        pembayaran_screen.destroy()
 
     def proses_pembayaran(self):
         try:
             jumlah_yg_dibayar = int(uang_dibayar.get())
         except ValueError:
-            Label(pembayaran_screen, text="Pembayaran gagal!").pack()
+            tkinter.messagebox.showinfo("Error","Pembayaran gagal!\nPembayaran wajib dalam bentuk angka!")
         else:
             if int(total_harga_barang) <= int(jumlah_yg_dibayar):
+                id_barang = []
+                nama_barang = []
+                harga_barang = []
+                stock_barang = []
+
+                try:
+                    f = open("list_barang.txt", 'r')
+                except FileNotFoundError:
+                    tkinter.messagebox.showinfo("Error", "File tidak ditemukan!")
+                else:
+                    for line in f:
+                        fields = line.split(";")
+                        id_barang.append(fields[0])
+                        nama_barang.append(fields[1])
+                        harga_barang.append(fields[2])
+                        stock_barang.append(fields[3])
+
                 if int(total_harga_barang) - int(jumlah_yg_dibayar) == 0:
-                    Label(pembayaran_screen, text="Pembayaran sukses!").pack()
-                    Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
+                    count = len(open("transaksi.txt").readlines())
+                    temp = str(count + 1) + ";" + str(barang_checkout) + ";" + str(jumlah_barang_checkout) + ";" + str(
+                        total_harga_barang) + ";" + str(date.today())
+
+                    try:
+                        f = open("transaksi.txt", "a")
+                    except FileNotFoundError:
+                        tkinter.messagebox.showinfo("Error", "File tidak diteumkan")
+                    else:
+                        f.write(temp + "\n")
+                        f.close()
+
+                        ambil_index = nama_barang.index(barang_checkout)
+                        update_stock = int(stock_barang[ambil_index]) - int(jumlah_barang_checkout)
+                        print("hoho")
+                        with open("list_barang.txt", "r") as fh:
+                            lines = fh.readlines()
+                            tempp = str(int(id_barang[ambil_index])) + ";" + barang_checkout + ";" + str(
+                                harga_barang[ambil_index]) + ";" + str(stock_barang[ambil_index])  # data sebelum nya
+                            temp_2 = str(int(ambil_index) + 2) + ";" + barang_checkout + ";" + str(
+                                harga_barang[ambil_index]) + ";" + str(update_stock)  # data yang baru
+                            lines.remove(tempp)
+
+                            with open("temp_barang.txt", 'r') as fhh:
+                                e = fhh.readlines()
+                            with open("temp_barang.txt", 'w') as output:
+                                for i, line in enumerate(e):  # menggunakan enumerate untuk melihat index setiap baris
+                                    if i == ambil_index:  # check jika garis tersebut cocok dengan id barang datanya, maka
+                                        output.write(temp_2 + "\n")
+                                        print("oHH")
+                                    output.write(line)
+
+                            with open("temp_barang.txt", "w") as new_f:  # save di temp dlu
+                                for line in lines:
+                                    new_f.write(line)
+                                new_f.write(temp_2 + "\n")
+
+                        with open("temp_barang.txt", 'r') as f:
+                            g = f.readlines()
+                            with open("list_barang.txt", 'w') as j:
+                                for line in g:
+                                    j.write(line)
+                    tkinter.messagebox.showinfo("Sukses","Pembayaran berhasil!")
+                    pembayaran_screen.destroy()
+                    belanja_screen.destroy()
+                else:
+                    c = int(jumlah_yg_dibayar) - int(total_harga_barang)
 
                     count = len(open("transaksi.txt").readlines())
                     temp = str(count + 1) + ";" + str(barang_checkout) + ";" + str(jumlah_barang_checkout) + ";" + str(
@@ -768,19 +839,44 @@ class minimarket:
                     else:
                         f.write(temp + "\n")
                         f.close()
-                else:
-                    c = int(jumlah_yg_dibayar) - int(total_harga_barang)
+                        ambil_index = nama_barang.index(barang_checkout)
+                        update_stock = int(stock_barang[ambil_index]) - int(jumlah_barang_checkout)
+                        print("hoho")
+                        with open("list_barang.txt", "r") as fh:
+                            lines = fh.readlines()
+                            tempp = str(int(id_barang[ambil_index])) + ";" + barang_checkout + ";" + str(
+                                harga_barang[ambil_index]) + ";" + str(stock_barang[ambil_index])  # data sebelum nya
+                            temp_2 = str(int(ambil_index) + 2) + ";" + barang_checkout + ";" + str(
+                                harga_barang[ambil_index]) + ";" + str(update_stock)  # data yang baru
+                            lines.remove(tempp)
 
-                    Label(pembayaran_screen, text="Pembayaran sukses, dengan kembalian sebesar Rp " + str(c) + ".").pack()
-                    Label(pembayaran_screen, text="Terima kasih sudah berbelanja!").pack()
+                            with open("temp_barang.txt", 'r') as fhh:
+                                e = fhh.readlines()
+                            with open("temp_barang.txt", 'w') as output:
+                                for i, line in enumerate(e):  # menggunakan enumerate untuk melihat index setiap baris
+                                    if i == ambil_index:  # check jika garis tersebut cocok dengan id barang datanya, maka
+                                        output.write(temp_2 + "\n")
+                                        print("oHH")
+                                    output.write(line)
+
+                            with open("temp_barang.txt", "w") as new_f:  # save di temp dlu
+                                for line in lines:
+                                    new_f.write(line)
+                                new_f.write(temp_2 + "\n")
+
+                        with open("temp_barang.txt", 'r') as f:
+                            g = f.readlines()
+                            with open("list_barang.txt", 'w') as j:
+                                for line in g:
+                                    j.write(line)
+                    tkinter.messagebox.showinfo("Sukses", "Pembayaran berhasil, dengan kembalian sebesar Rp"+str(c))
+                    pembayaran_screen.destroy()
+                    belanja_screen.destroy()
             else:
                 Label(pembayaran_screen, text="Pembayaran gagal!").pack()
 
-    def clear_nama_barang_listbox(self):
-        #ini dipake untuk refresh data yang ada di listbox
+    def clear_nama_barang_listbox(dself):
         listbox_tabel_nama_barang.delete(0,"end")
-        listbox_tabel_harga_barang.delete(0,"end")
-        listbox_tabel_stock_barang.delete(0,"end")
 
     def quit(self):  # exit!!!
         exit_program = tkinter.messagebox.askquestion("Exit", "Are you sure you want to exit?")
