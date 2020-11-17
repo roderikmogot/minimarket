@@ -1,5 +1,3 @@
-# project_alpro_minimarket
+# minimarket
 
 STATUS : 100%
-
-PROJECT ALPRO SEM 1!
