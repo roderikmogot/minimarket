@@ -1,3 +1,3 @@
 # minimarket
 
-STATUS : 100%
+Programming Language: Python(Tkinter Library)
