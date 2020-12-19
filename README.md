@@ -1,5 +1,4 @@
-# minimarket
-
+# Minimarket
 Programming Language: Python feat. Tkinter Library
 
 Features:
