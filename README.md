@@ -1,9 +1,9 @@
 # minimarket
 
-Programming Language: Python(Tkinter Library)
+Programming Language: Python feat. Tkinter Library
 
 Features:
 1. Login/Sign in
 2. CRUD
-3. Sort data          
-4. Data save handling using file
+3. Sort data       
+4. Data stored in txt file
