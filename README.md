@@ -6,3 +6,7 @@ Features:
 2. CRUD
 3. Sort data       
 4. Data stored in txt file
+
+<h2>Installation </h2>
+ 1. Simply install Python
+ 2. IDEs like Pycharm is preffered
