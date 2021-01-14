@@ -9,4 +9,4 @@ Features:
 
 Installation: 
  1. Simply install Python
- 2. IDEs like Pycharm is preffered
+ 2. IDEs like Pycharm is prefered
