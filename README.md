@@ -6,7 +6,3 @@ Features:
 2. CRUD
 3. Sort data       
 4. Data stored in txt file
-
-Installation: 
- 1. Simply install Python
- 2. IDE like Pycharm is preferred
