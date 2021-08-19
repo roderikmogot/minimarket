@@ -1,6 +1,4 @@
 # Minimarket
-Programming Language: Python feat. Tkinter Library
-
 Features:
 1. Login/Sign in
 2. CRUD
