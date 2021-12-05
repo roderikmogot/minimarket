@@ -4,18 +4,6 @@ import tkinter.ttk as ttk
 from tkinter import *
 from datetime import date
 
-#yang masih kurang
-#1. edit data,
-#2. kurangin stock
-#3.tampilan edit data kurang efisien
-
-#-----yg udh selesai-------
-#1. login selesai
-#2. client melakukan pembelian
-#3. list transaksi
-#3. verifikasi add data jika ada yg sama
-#3. sort data
-
 class minimarket:
     def __init__(self, root):
         self.root = root
